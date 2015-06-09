@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="applicationContext-student.xml"/>
+
+    <!--配置定时执行任务-->
+    <bean id="jobDetail"
+          class="org.springframework.scheduling.quartz.MethodInvokingJobDetailFactoryBean">
+        <!--执行任务类-->
+        <property name="targetObject">
+            <ref bean="studentService"/>
+        </property>
+        <!--执行任务方法-->
+        <property name="targetMethod">
+            <value>timeAction</value>
+        </property>
+    </bean>
+    <!--配置定时执行任务的时间，每天晚上20点执行-->
+    <bean id="quartzTrigger"
+          class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail">
+            <ref bean="jobDetail"/>
+        </property>
+        <property name="cronExpression">
+            <!--每天下午3点0分0秒执行任务-->
+            <value>0 33 20 * * ?</value>
+        </property>
+    </bean>
+    <!-- 一定要把autowire设置为no，否则它能感知出dataSourse并设置里面的dataSourse的属性-->
+    <bean autowire="no"
+          class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+        <property name="triggers">
+            <!--配置触发器-->
+            <list>
+                <ref local="quartzTrigger"/>
+            </list>
+        </property>
+    </bean>
+
+</beans>

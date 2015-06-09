@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <import resource="applicationContext-jdbc.xml"/>
+
+    <!--ibatis配置-->
+    <bean id="sqlMapClient-student"
+          class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+        <property name="configLocation"
+                  value="classpath:/sqlMapConfig-student.xml"/>
+    </bean>
+
+    <bean id="studentDAO" class="com.zl.webService.dao.impl.StudentDAOImpl"
+          parent="baseDAO">
+        <property name="sqlMapClient" ref="sqlMapClient-student"/>
+    </bean>
+
+    <bean id="studentService" class="com.zl.webService.service.impl.StudentServiceImpl">
+        <property name="studentDAO" ref="studentDAO"/>
+    </bean>
+
+</beans>

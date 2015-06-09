@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE sqlMap
+        PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN"
+        "http://ibatis.apache.org/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="student">
+    <typeAlias alias="Student" type="com.zl.webService.entity.Student"/>
+
+    <resultMap id="student" class="Student">
+        <result property="studentId" column="STUDENT_ID" nullValue="0"/>
+        <result property="name" column="NAME"/>
+        <result property="sex" column="SEX"/>
+        <result property="studyNo" column="STUDY_NO"/>
+        <result property="birthday" column="BIRTHDAY"/>
+    </resultMap>
+
+    <parameterMap id="studentInfo" class="Student">
+        <parameter property="name" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+        <parameter property="sex" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+        <parameter property="studyNo" javaType="java.lang.String" jdbcType="VARCHAR" mode="IN"/>
+        <parameter property="birthday" javaType="java.util.Date" jdbcType="DATE" mode="IN"/>
+        <!--这里一定要DOUBLE类型-->
+        <parameter property="studentId" javaType="java.lang.Long" jdbcType="DOUBLE" mode="INOUT"/>
+    </parameterMap>
+
+    <procedure id="create" parameterMap="studentInfo">
+        {CALL PKG_STUDENT.P_CREATE(?,?,?,?,?)}
+    </procedure>
+
+    <procedure id="delete" parameterClass="Student">
+        {CALL PKG_STUDENT.P_REMOVE(#studentId#)}
+    </procedure>
+
+    <procedure id="modifyStudent" parameterMap="studentInfo">
+        {CALL PKG_STUDENT.P_MODIFY(?,?,?,?,?)}
+    </procedure>
+
+    <!--注：isNotEmpty表示既不为空也不为null,isNotNull仅表示不为null-->
+    <select id="searchStudent" resultMap="student"
+            parameterClass="Student">
+        SELECT T.* from T_STUDENT T
+        <dynamic prepend="WHERE">
+            <isGreaterThan prepend="AND" property="studentId" compareValue="0">
+                T.STUDENT_ID = #studentId#
+            </isGreaterThan>
+            <isNotEmpty prepend="AND" property="name">
+                T.NAME LIKE $name$
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="sex">
+                T.SEX = #sex#
+            </isNotEmpty>
+            <isNotEmpty prepend="AND" property="studyNo">
+                T.STUDY_NO = #studyNo#
+            </isNotEmpty>
+        </dynamic>
+        ORDER BY T.STUDENT_ID DESC
+    </select>
+</sqlMap>
