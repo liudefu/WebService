@@ -82,7 +82,7 @@ public class WebServiceInterfaceImpl implements WebServiceInterface {
         Root root = new Root();
         Body body = new Body();
         root.setBody(body);
-        body.setInfo(e.getMessage());
+        body.setInfo("系统出现未知错误，请联系管理员");
         body.setResultFlag(false);
         return XmlTransForm.objToXml(root);
     }
