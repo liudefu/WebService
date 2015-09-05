@@ -56,8 +56,10 @@ public class WebServiceInterfaceImpl implements WebServiceInterface {
                 returnXml = XmlTransForm.objToXml(root);
             }
         } catch (ServiceException e) {
+            e.printStackTrace();
             returnXml = serviceExceptionXml(e);
         } catch (Exception e){
+            e.printStackTrace();
             returnXml = unknownExceptionXml(e);
         }
         return returnXml;
@@ -75,6 +77,7 @@ public class WebServiceInterfaceImpl implements WebServiceInterface {
         root.setBody(body);
         body.setInfo(e.getMessage());
         body.setResultFlag(false);
+        e.printStackTrace();
         return XmlTransForm.objToXml(root);
     }
 
@@ -82,8 +85,9 @@ public class WebServiceInterfaceImpl implements WebServiceInterface {
         Root root = new Root();
         Body body = new Body();
         root.setBody(body);
-        body.setInfo("系统出现未知错误，请联系管理员");
+        body.setInfo("系统出现未知错误，请联系管理员:"+e.getMessage());
         body.setResultFlag(false);
+        e.printStackTrace();
         return XmlTransForm.objToXml(root);
     }
 }

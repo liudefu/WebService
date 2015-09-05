@@ -13,6 +13,7 @@
     <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
 
     <import resource="applicationContext-student.xml"/>
+    <import resource="applicationContext-businessFramewok.xml"/>
 
     <jaxws:endpoint id="WebServiceInterface" address="/service"
                     implementorClass="com.zl.webService.service.WebServiceInterface">
@@ -27,12 +28,13 @@
         </jaxws:inInterceptors>
     </jaxws:endpoint>
 
-    <bean id="businessService" class="com.zl.webService.service.impl.BusinessServiceImpl">
-        <property name="studentService" ref="studentService"/>
-    </bean>
-
     <bean id="webService" class="com.zl.webService.service.impl.WebServiceInterfaceImpl">
         <property name="businessService" ref="businessService"/>
+    </bean>
+
+    <bean id="businessService" class="com.zl.webService.service.impl.BusinessServiceImpl">
+        <property name="studentService" ref="studentService"/>
+        <property name="methodContexts" ref="methodContexts"/>
     </bean>
 
 </beans>

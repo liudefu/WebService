@@ -1,5 +1,7 @@
 package com.zl.webService.service.impl;
 
+import com.zl.webService.annotation.Action;
+import com.zl.webService.annotation.BusinessComponent;
 import com.zl.webService.service.ServiceException;
 import com.zl.webService.entity.Student;
 import com.zl.webService.service.StudentService;
@@ -14,13 +16,30 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Map;
 
 /**
  * Created by Administrator on 2015/4/29.
  */
+@BusinessComponent(name="BusinessComponent")
 public class BusinessServiceImpl implements BusinessService{
     public static final Log LOG = LogFactory.getLog(BusinessServiceImpl.class);
+
+    /**
+     * Action所对应的方法的集合
+     */
+    private Map<String, Method> methodContexts;
+
     private StudentService studentService;
+
+    public Map<String, Method> getMethodContexts() {
+        return methodContexts;
+    }
+
+    public void setMethodContexts(Map<String, Method> methodContexts) {
+        this.methodContexts = methodContexts;
+    }
 
     public StudentService getStudentService() {
         return studentService;
@@ -31,19 +50,12 @@ public class BusinessServiceImpl implements BusinessService{
     }
 
     public void business(Root root) throws Exception{
+
         Head head = root.getHead();
         Body body = root.getBody();
-        if("1001".equals(head.getBusCode())){
-            //新增学生信息
-            createStudent(body);
-            head.setBusCode("2001");
-        }else if("1002".equals(head.getBusCode())){
-            //修改学生信息
-            modifyStudent(body);
-            head.setBusCode("2002");
-        }else if("1003".equals(head.getBusCode())){
-            deleteStudent(body);
-            head.setBusCode("2003");
+        Method method = methodContexts.get(head.getBusCode());
+        if(method != null){
+            method.invoke(this,body);
         }else {
             LOG.error(Configuration.getInstance().getValue(
                     Constants.XML_BUSY_CODE_NOT_EXIT));
@@ -59,12 +71,14 @@ public class BusinessServiceImpl implements BusinessService{
      * 修改学生信息
      * @param body
      */
+    @Action(busCode = "1001",busName = "新增学生信息")
     private void createStudent(Body body) throws Exception{
         Student student = new Student();
         try {
             org.apache.commons.beanutils.BeanUtils.copyProperties(
                     student,body.getBusStudent());
         } catch (Exception e) {
+            e.printStackTrace();
             LOG.error(Configuration.getInstance().getValue(
                     Constants.BUS_STUDENT_INFO_ERROR));
             throw new ServiceException(
@@ -73,13 +87,14 @@ public class BusinessServiceImpl implements BusinessService{
         }
         studentService.createStudent(student);
     }
-
+    @Action(busCode = "1002",busName = "修改学生信息")
     private void modifyStudent(Body body) throws Exception{
         Student student = new Student();
         try {
             org.apache.commons.beanutils.BeanUtils.copyProperties(
                     student,body.getBusStudent());
         } catch (Exception e) {
+            e.printStackTrace();
             LOG.error(Configuration.getInstance().getValue(
                     Constants.BUS_STUDENT_INFO_ERROR));
             throw new ServiceException(
@@ -88,13 +103,14 @@ public class BusinessServiceImpl implements BusinessService{
         }
         studentService.modifyStudent(student);
     }
-
+    @Action(busCode = "1003",busName = "删除学生信息")
     private void deleteStudent(Body body) throws Exception{
         Student student = new Student();
         try {
             org.apache.commons.beanutils.BeanUtils.copyProperties(
                     student,body.getBusStudent());
         } catch (Exception e) {
+            e.printStackTrace();
             LOG.error(Configuration.getInstance().getValue(
                     Constants.BUS_STUDENT_INFO_ERROR));
             throw new ServiceException(

@@ -57,6 +57,32 @@ public class Student {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Student student = (Student) o;
+
+        if (studentId != student.studentId) return false;
+        if (birthday != null ? !birthday.equals(student.birthday) : student.birthday != null) return false;
+        if (name != null ? !name.equals(student.name) : student.name != null) return false;
+        if (sex != null ? !sex.equals(student.sex) : student.sex != null) return false;
+        if (studyNo != null ? !studyNo.equals(student.studyNo) : student.studyNo != null) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = (int) (studentId ^ (studentId >>> 32));
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (sex != null ? sex.hashCode() : 0);
+        result = 31 * result + (studyNo != null ? studyNo.hashCode() : 0);
+        result = 31 * result + (birthday != null ? birthday.hashCode() : 0);
+        return result;
+    }
+
+    @Override
     public String toString() {
         return "Student{" +
                 "studentId=" + studentId +
