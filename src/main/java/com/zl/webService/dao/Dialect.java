@@ -9,8 +9,7 @@ package com.zl.webService.dao;
 public interface Dialect {
     /**
      * 获取带页数的Sql语句
-     *
-     * @param sql    ԭ
+     * @param sql
      * @param offset
      * @param limit
      * @return
