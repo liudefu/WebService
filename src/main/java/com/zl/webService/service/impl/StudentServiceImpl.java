@@ -18,7 +18,7 @@ import java.util.Iterator;
  *          Date: 2013-12-8
  *          Time: 13:30:27
  */
-public class StudentServiceImpl implements StudentService {
+public class StudentServiceImpl implements BaseService<Student>,StudentService {
     public static final Log LOG = LogFactory.getLog(StudentServiceImpl.class);
     private StudentDAO studentDAO;
 
@@ -30,7 +30,7 @@ public class StudentServiceImpl implements StudentService {
         this.studentDAO = studentDAO;
     }
 
-    public Student createStudent(Student student) {
+    public Student create(Student student) {
         try {
             student = getStudentDAO().create(student);
         } catch (Exception e) {
@@ -43,7 +43,7 @@ public class StudentServiceImpl implements StudentService {
         return student;
     }
 
-    public void deleteStudent(Student student) {
+    public void delete(Student student) {
         try {
             getStudentDAO().deleteStudent(student);
         } catch (Exception e) {
@@ -55,7 +55,7 @@ public class StudentServiceImpl implements StudentService {
         }
     }
 
-    public List<Student> searchStudent(Student student, int pageNumber, int pageSize) {
+    public List<Student> search(Student student, int pageNumber, int pageSize) {
         List studentList = null;
         try {
             studentList = getStudentDAO().searchStudent(student, pageNumber, pageSize);
@@ -65,7 +65,7 @@ public class StudentServiceImpl implements StudentService {
         return studentList;
     }
 
-    public void modifyStudent(Student student) {
+    public void update(Student student) {
         try {
             getStudentDAO().modifyStudent(student);
         } catch (Exception e) {

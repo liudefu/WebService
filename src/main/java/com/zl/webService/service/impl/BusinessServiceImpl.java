@@ -85,7 +85,7 @@ public class BusinessServiceImpl implements BusinessService{
                     Configuration.getInstance().getValue(
                             Constants.BUS_STUDENT_INFO_ERROR));
         }
-        studentService.createStudent(student);
+        studentService.create(student);
     }
     @Action(busCode = "1002",busName = "修改学生信息")
     private void modifyStudent(Body body) throws Exception{
@@ -101,7 +101,7 @@ public class BusinessServiceImpl implements BusinessService{
                     Configuration.getInstance().getValue(
                             Constants.BUS_STUDENT_INFO_ERROR));
         }
-        studentService.modifyStudent(student);
+        studentService.update(student);
     }
     @Action(busCode = "1003",busName = "删除学生信息")
     private void deleteStudent(Body body) throws Exception{
@@ -117,6 +117,6 @@ public class BusinessServiceImpl implements BusinessService{
                     Configuration.getInstance().getValue(
                             Constants.BUS_STUDENT_INFO_ERROR));
         }
-        studentService.deleteStudent(student);
+        studentService.delete(student);
     }
 }
