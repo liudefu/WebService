@@ -8,11 +8,13 @@ package com.zl.webService;
  */
 public class Constants {
     public static String XML_MARSHALLER_ERROR = "XML_MARSHALLER_ERROR";
-    public static String XML_UNMARSHALLER_ERROR = "XML_MARSHALLER_ERROR";
+    public static String XML_UNMARSHALLER_ERROR = "XML_UNMARSHALLER_ERROR";
     public static String XML_HEAD_NOT_EXIT = "XML_HEAD_NOT_EXIT";
     public static String XML_BODY_NOT_EXIT = "XML_BODY_NOT_EXIT";
-    public static String XML_BUSY_CODE_NOT_EXIT = "XML_BUSY_CODE_NOT_EXIT";
+    public static String XML_BUSY_CODE_NOT_EXISTS= "XML_BUSY_CODE_NOT_EXISTS";
     public static String BUS_STUDENT_INFO_ERROR = "BUS_STUDENT_INFO_ERROR";
+    public static String JSON_MARSHALLER_ERROR = "JSON_MARSHALLER_ERROR";
+    public static String JSON_UNMARSHALLER_ERROR = "JSON_UNMARSHALLER_ERROR";
     public static String MODIFY_STUDENT_ERROR = "MODIFY_STUDENT_ERROR";
     public static String DELETE_STUDENT_ERROR = "DELETE_STUDENT_ERROR";
     public static String CREATE_STUDENT_ERROR = "CREATE_STUDENT_ERROR";

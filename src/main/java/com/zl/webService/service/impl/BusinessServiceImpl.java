@@ -58,10 +58,10 @@ public class BusinessServiceImpl implements BusinessService{
             method.invoke(this,body);
         }else {
             LOG.error(Configuration.getInstance().getValue(
-                    Constants.XML_BUSY_CODE_NOT_EXIT));
+                    Constants.XML_BUSY_CODE_NOT_EXISTS));
             throw new ServiceException(
                     Configuration.getInstance().getValue(
-                            Constants.XML_BUSY_CODE_NOT_EXIT));
+                            Constants.XML_BUSY_CODE_NOT_EXISTS));
         }
         body.setResultFlag(true);
         body.setInfo("操作成功");

@@ -1,5 +1,9 @@
 package com.zl.webService.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import java.util.Date;
 
 /**
@@ -9,11 +13,13 @@ import java.util.Date;
  *          Time: 9:42:57
  */
 public class Student {
-
+    @JsonProperty(value = "学生信息ID") //json报文中对应标签名称
     private long studentId;
     private String name;
+    @JsonIgnore//在与json报文的相互转换过程中忽略该字段
     private String sex;
     private String studyNo;
+    @JsonFormat(pattern = "yyyy-MM-dd")//json报文中的格式
     private Date birthday;
 
     public long getStudentId() {
