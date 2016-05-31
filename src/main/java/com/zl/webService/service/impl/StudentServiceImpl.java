@@ -1,5 +1,7 @@
 package com.zl.webService.service.impl;
 
+import com.zl.webService.annotation.CustomDataSource;
+import com.zl.webService.service.BaseService;
 import com.zl.webService.service.ServiceException;
 import com.zl.webService.dao.StudentDAO;
 import com.zl.webService.entity.Student;
@@ -8,9 +10,10 @@ import com.zl.webService.Constants;
 import com.zl.webService.util.Configuration;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 import java.util.List;
-import java.util.Iterator;
 
 /**
  * @author <a href="mailto:luckylucky3210@163.com">ZL</a>
@@ -55,11 +58,13 @@ public class StudentServiceImpl implements BaseService<Student>,StudentService {
         }
     }
 
+    @CustomDataSource(key = "slave")
     public List<Student> search(Student student, int pageNumber, int pageSize) {
         List studentList = null;
         try {
             studentList = getStudentDAO().searchStudent(student, pageNumber, pageSize);
         } catch (Exception e) {
+            e.printStackTrace();
             LOG.error("查询学生信息失败：" + student);
         }
         return studentList;
@@ -79,5 +84,13 @@ public class StudentServiceImpl implements BaseService<Student>,StudentService {
 
     public void timeAction(){
         LOG.debug("Hello World!");
+    }
+
+    public static void main(String[] args){
+        ApplicationContext atx = new ClassPathXmlApplicationContext(
+                new String[]{"applicationContext-student.xml"});
+        StudentService studentService = (StudentService) atx.getBean("studentService");
+        Student student = new Student();
+        System.out.println(studentService.search(student,1,1));
     }
 }

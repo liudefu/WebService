@@ -1,4 +1,4 @@
-package com.zl.webService.dao;
+package com.zl.webService.dao.base;
 
 /**
  * @author <a href="mailto:luckylucky3210@163.com">ZL</a>

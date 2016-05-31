@@ -15,13 +15,37 @@
         </property>
     </bean>
 
+    <bean id="dataSource" class="com.zl.webService.dao.base.DbRouteDataSource">
+        <property name="targetDataSources">
+            <map>
+                <entry key="master" value-ref="master"/>
+                <entry key="slave" value-ref="slave"/>
+            </map>
+        </property>
+    </bean>
+
     <!--dataSource-->
-    <bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+    <bean id="master" class="com.mchange.v2.c3p0.ComboPooledDataSource"
           destroy-method="close">
         <property name="driverClass" value="${driverClass}"/>
-        <property name="jdbcUrl" value="${jdbcUrl}"/>
-        <property name="user" value="${user}"/>
-        <property name="password" value="${password}"/>
+        <property name="jdbcUrl" value="${jdbcUrl_master}"/>
+        <property name="user" value="${user_master}"/>
+        <property name="password" value="${password_master}"/>
+        <property name="initialPoolSize" value="2"/>
+        <property name="minPoolSize" value="2"/>
+        <property name="maxPoolSize" value="100"/>
+        <property name="checkoutTimeout" value="5000"/>
+        <property name="maxIdleTime" value="1800"/>
+        <property name="idleConnectionTestPeriod" value="3000"/>
+        <property name="acquireIncrement" value="2"/>
+    </bean>
+
+    <bean id="slave" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+          destroy-method="close">
+        <property name="driverClass" value="${driverClass}"/>
+        <property name="jdbcUrl" value="${jdbcUrl_slave}"/>
+        <property name="user" value="${user_slave}"/>
+        <property name="password" value="${password_slave}"/>
         <property name="initialPoolSize" value="2"/>
         <property name="minPoolSize" value="2"/>
         <property name="maxPoolSize" value="100"/>
@@ -36,22 +60,8 @@
           class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
         <property name="dataSource" ref="dataSource"/>
     </bean>
-    <!-- 采用@Transactional注解方式使用事务-->
-    <!--<tx:annotation-driven transaction-manager="transactionManager"/>-->
 
-    <!--所有Bean共享一个代理基类方式使用事务-->
-    <!--<bean id="baseTxProxy" lazy-init="true"-->
-    <!--class="org.springframework.transaction.interceptor.TransactionProxyFactoryBean">-->
-    <!--<property name="transactionManager" ref="transactionManager"/>-->
-    <!--<property name="transactionAttributes">-->
-    <!--<props>-->
-    <!--<prop key="*">PROPAGATION_REQUIRED</prop>-->
-    <!--<prop key="get*">PROPAGATION_REQUIRED,readOnly</prop>-->
-    <!--</props>-->
-    <!--</property>-->
-    <!--</bean>-->
-
-    <!--使用tx标签配置的拦截器-->
+    <!--使用tx标签配置的事务拦截器-->
     <tx:advice id="txAdvice" transaction-manager="transactionManager">
         <tx:attributes>
             <tx:method name="get*" read-only="true"/>
@@ -59,6 +69,7 @@
         </tx:attributes>
     </tx:advice>
 
+    <!--事务控制切面-->
     <aop:config proxy-target-class="true">
         <aop:pointcut id="DynamicDataServicePointcut"
                       expression="execution(* *..*Service.*(..))"/>
@@ -66,23 +77,38 @@
                      pointcut-ref="DynamicDataServicePointcut"/>
     </aop:config>
 
-    <!--以上为基本配置-->
-    <bean id="sqlExecutor" class="com.zl.webService.dao.base.PageExecutor">
+    <!--读写分离切面-->
+    <aop:config proxy-target-class="true">
+        <aop:aspect ref="dataSourceAspect">
+            <aop:pointcut id="DynamicDataSourcePointcut"
+                          expression="execution(* com.zl.webService.service.impl.StudentServiceImpl.*(..))"/>
+            <aop:before method="doBefore" pointcut-ref="DynamicDataSourcePointcut"/>
+            <aop:after method="doAfter" pointcut-ref="DynamicDataSourcePointcut"/>
+        </aop:aspect>
+    </aop:config>
+
+    <bean id="dataSourceAspect" class="com.zl.webService.dao.base.DataSourceAspect"/>
+
+    <!--物理分页执行器-->
+    <bean id="customSqlExecutor" class="com.zl.webService.dao.base.CustomExecutor">
         <property name="dialect">
-            <bean class="com.zl.webService.dao.base.OracleDialect"/>
+            <ref bean="oracleDialect"/>
         </property>
         <property name="enablePage">
             <value>true</value>
         </property>
     </bean>
 
-    <bean id="baseDAO" abstract="true" class="com.zl.webService.dao.impl.BaseDAO"
-            init-method="initialize">
+    <!--Oracle数据库方言-->
+    <bean id="oracleDialect" class="com.zl.webService.dao.base.OracleDialect"/>
+
+    <bean id="customDaoSupport" abstract="true" class="com.zl.webService.dao.base.CustomDaoSupport"
+            init-method="initialization" lazy-init="true">
         <property name="dataSource">
             <ref bean="dataSource" />
         </property>
-        <property name="sqlExecutor">
-            <ref bean="sqlExecutor" />
+        <property name="customSqlExecutor">
+            <ref bean="customSqlExecutor"/>
         </property>
     </bean>
 </beans>

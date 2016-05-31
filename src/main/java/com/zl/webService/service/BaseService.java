@@ -1,6 +1,5 @@
-package com.zl.webService.service.impl;
+package com.zl.webService.service;
 
-import com.zl.webService.dao.impl.BaseDAO;
 
 import java.util.List;
 

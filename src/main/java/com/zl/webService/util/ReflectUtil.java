@@ -1,4 +1,4 @@
-package com.zl.webService.dao.base;
+package com.zl.webService.util;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;

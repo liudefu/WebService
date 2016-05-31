@@ -45,7 +45,7 @@
                 T.STUDENT_ID = #studentId#
             </isGreaterThan>
             <isNotEmpty prepend="AND" property="name">
-                T.NAME LIKE $name$
+                T.NAME LIKE '%$name$%'
             </isNotEmpty>
             <isNotEmpty prepend="AND" property="sex">
                 T.SEX = #sex#

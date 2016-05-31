@@ -1,10 +1,9 @@
 package com.zl.webService.dao.impl;
 
 import com.zl.webService.dao.StudentDAO;
+import com.zl.webService.dao.base.CustomDaoSupport;
 import com.zl.webService.entity.Student;
-import com.zl.webService.dao.impl.BaseDAO;
 
-import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -13,7 +12,7 @@ import java.util.List;
  *          Date: 2013-12-8
  *          Time: 13:37:49
  */
-public class StudentDAOImpl extends BaseDAO implements StudentDAO {
+public class StudentDAOImpl extends CustomDaoSupport implements StudentDAO {
     public Student create(Student student) {
         getSqlMapClientTemplate().insert(
                 "student.create", student);

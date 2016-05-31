@@ -1,9 +1,6 @@
 package com.zl.webService.service;
 
 import com.zl.webService.entity.Student;
-import com.zl.webService.service.impl.BaseService;
-
-import java.util.List;
 
 /**
  * @author <a href="mailto:luckylucky3210@163.com">ZL</a>

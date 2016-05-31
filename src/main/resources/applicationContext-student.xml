@@ -14,7 +14,7 @@
     </bean>
 
     <bean id="studentDAO" class="com.zl.webService.dao.impl.StudentDAOImpl"
-          parent="baseDAO">
+          parent="customDaoSupport">
         <property name="sqlMapClient" ref="sqlMapClient-student"/>
     </bean>
 

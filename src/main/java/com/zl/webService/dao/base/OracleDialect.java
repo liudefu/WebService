@@ -1,7 +1,5 @@
 package com.zl.webService.dao.base;
 
-import com.zl.webService.dao.Dialect;
-
 /**
  * @author <a href="mailto:luckylucky3210@163.com">ZL</a>
  * @version $Id$
