@@ -17,4 +17,6 @@ public interface WebServiceInterface {
 
     List searchStudent(Student student, int pageNumber);
 
+    Student oneStudent(Student student);
+
 }

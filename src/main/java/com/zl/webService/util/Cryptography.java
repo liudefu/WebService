@@ -1,7 +1,7 @@
 package com.zl.webService.util;
 
 
-import org.apache.axiom.om.util.Base64;
+import org.apache.geronimo.mail.util.Base64;
 import org.apache.geronimo.mail.util.Hex;
 
 import javax.crypto.Cipher;
@@ -103,7 +103,7 @@ public class Cryptography {
       * @param b
      * @return
      */
-    public static String base64Encode(byte[] b) {
+    public static byte[] base64Encode(byte[] b) {
         return Base64.encode(b);
     }
 

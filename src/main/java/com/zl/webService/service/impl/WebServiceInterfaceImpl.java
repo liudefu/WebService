@@ -15,6 +15,8 @@ import com.zl.webService.xml.XmlTransForm;
 import javax.jws.WebMethod;
 import javax.jws.WebService;
 import javax.xml.bind.JAXBException;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -68,6 +70,16 @@ public class WebServiceInterfaceImpl implements WebServiceInterface {
     @WebMethod
     public List searchStudent(Student student, int pageNumber) {
         return null;
+    }
+
+    @WebMethod
+    public Student oneStudent(Student student) {
+        student.setName("zl");
+        student.setSex("male");
+        student.setBirthday(new Date());
+        student.setStudentId(1);
+        student.setStudyNo("2009093101");
+        return student;
     }
 
 
