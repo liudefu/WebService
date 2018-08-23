@@ -72,7 +72,7 @@
     <!--事务控制切面-->
     <aop:config proxy-target-class="true">
         <aop:pointcut id="DynamicDataServicePointcut"
-                      expression="execution(* *..*Service.*(..))"/>
+                      expression="execution(* *..*Service*.*(..))"/>
         <aop:advisor advice-ref="txAdvice"
                      pointcut-ref="DynamicDataServicePointcut"/>
     </aop:config>
